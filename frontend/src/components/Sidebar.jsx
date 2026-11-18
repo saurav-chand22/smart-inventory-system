@@ -33,9 +33,7 @@ const Sidebar = () => {
     { name: 'Purchase Orders', path: '/purchase-orders', icon: ClipboardList },
     { name: 'Customer Orders', path: '/customer-orders', icon: ShoppingCart },
     { name: 'Shipments', path: '/shipments', icon: Truck },
-    { name: 'Reports & Analytics', path: '/reports', icon: FileSpreadsheet },
-    ...(isAdmin ? [{ name: 'User Management', path: '/users', icon: UserCheck }] : []),
-    { name: 'Profile & Settings', path: '/profile', icon: Settings }
+    { name: 'Reports & Analytics', path: '/reports', icon: FileSpreadsheet }
   ];
 
   return (
