@@ -9,7 +9,7 @@ Developed with a strong focus on **Database Management Systems (DBMS)**, **Relat
 ## 🚀 Key Highlights & Architecture
 
 - **Frontend:** React 18, Vite, React Router v6, Axios with JWT interceptors, Lucide Icons, pure modern CSS design system.
-- **Backend:** Java 21 / 24 LTS, Spring Boot 3.3.5, Spring Data JPA, Hibernate ORM, Spring Security with stateless JWT (HMAC-SHA256) and BCrypt hashing.
+- **Backend:** Java 25 LTS, Spring Boot 3.3.5, Spring Data JPA, Hibernate ORM, Spring Security with stateless JWT (HMAC-SHA256) and BCrypt hashing.
 - **Relational Database:** MySQL 8.0 (InnoDB) with 13 fully normalized tables (3NF), 5 SQL analytical views, 2 ACID stored procedures with row-level locking, and secondary B+Tree indexes.
 - **Dual Runtime Profiles:**
   - `mysql` (Default production mode connecting to MySQL 8.0 on port 3306).

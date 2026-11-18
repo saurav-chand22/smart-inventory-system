@@ -240,7 +240,7 @@ A relation $R$ is in 3NF if and only if it is in 2NF and there is no transitive 
   - Component-based modular architecture.
   - Centralized Axios client with Bearer token injection and HTTP 401/403 interceptors.
   - Dynamic UI state, toast alerts, confirmation modals, and responsive layout.
-- **Layer 2: Application Layer (Java 21 + Spring Boot 3.x)**
+- **Layer 2: Application Layer (Java 25 + Spring Boot 3.x)**
   - RESTful API endpoints organized into `Controller -> Service -> Repository` pattern.
   - Declarative `@Transactional(rollbackFor = Exception.class)` on multi-step business transactions.
   - Global exception handling returning RFC 7807 compliant error structures.

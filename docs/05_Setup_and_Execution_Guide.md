@@ -7,7 +7,7 @@
 
 ```text
 smart-inventory-system/
-├── backend/                               # Spring Boot 3.3.5 Backend (Java 21)
+├── backend/                               # Spring Boot 3.3.5 Backend (Java 25)
 │   ├── src/main/java/com/inventory/smartinventory/
 │   │   ├── config/                        # SecurityConfig, JwtFilter, DataInitializer
 │   │   ├── controller/                    # 13 REST Controllers
@@ -53,7 +53,7 @@ smart-inventory-system/
 ### 2. System Prerequisites
 
 Ensure the following tools are installed on your machine:
-- **Java Development Kit (JDK):** Version 21 LTS or newer (tested on Java 24). Verify with:
+- **Java Development Kit (JDK):** Version 25 LTS or newer. Verify with:
   ```bash
   java -version
   ```
