@@ -27,7 +27,6 @@ const Sidebar = () => {
     { name: 'Products', path: '/products', icon: Package },
     { name: 'Categories', path: '/categories', icon: Layers },
     { name: 'Inventory', path: '/inventory', icon: Boxes },
-    { name: 'Stock Transactions', path: '/stock-transactions', icon: ArrowLeftRight },
     { name: 'Suppliers', path: '/suppliers', icon: Users },
     { name: 'Warehouses', path: '/warehouses', icon: Building2 },
     { name: 'Purchase Orders', path: '/purchase-orders', icon: ClipboardList },

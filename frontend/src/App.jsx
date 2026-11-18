@@ -86,8 +86,6 @@ function App() {
           <Route path="/purchase-orders" element={<ProtectedLayout><PurchaseOrders /></ProtectedLayout>} />
           <Route path="/customer-orders" element={<ProtectedLayout><CustomerOrders /></ProtectedLayout>} />
           <Route path="/shipments" element={<ProtectedLayout><Shipments /></ProtectedLayout>} />
-          <Route path="/stock-transactions" element={<ProtectedLayout><StockTransactions /></ProtectedLayout>} />
-          <Route path="/transactions" element={<ProtectedLayout><StockTransactions /></ProtectedLayout>} />
 
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
