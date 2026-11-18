@@ -86,6 +86,12 @@ function App() {
           <Route path="/purchase-orders" element={<ProtectedLayout><PurchaseOrders /></ProtectedLayout>} />
           <Route path="/customer-orders" element={<ProtectedLayout><CustomerOrders /></ProtectedLayout>} />
           <Route path="/shipments" element={<ProtectedLayout><Shipments /></ProtectedLayout>} />
+          <Route path="/stock-transactions" element={<ProtectedLayout><StockTransactions /></ProtectedLayout>} />
+          <Route path="/transactions" element={<ProtectedLayout><StockTransactions /></ProtectedLayout>} />
+          <Route path="/users" element={<ProtectedLayout adminOnly={true}><UserManagement /></ProtectedLayout>} />
+          <Route path="/reports" element={<ProtectedLayout><Reports /></ProtectedLayout>} />
+          <Route path="/profile" element={<ProtectedLayout><ProfileSettings /></ProtectedLayout>} />
+          <Route path="/settings" element={<ProtectedLayout><ProfileSettings /></ProtectedLayout>} />
 
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

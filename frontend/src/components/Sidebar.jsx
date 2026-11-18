@@ -25,10 +25,17 @@ const Sidebar = () => {
   const navItems = [
     { name: 'Dashboard', path: '/', icon: LayoutDashboard },
     { name: 'Products', path: '/products', icon: Package },
+    { name: 'Categories', path: '/categories', icon: Layers },
     { name: 'Inventory', path: '/inventory', icon: Boxes },
+    { name: 'Stock Transactions', path: '/stock-transactions', icon: ArrowLeftRight },
+    { name: 'Suppliers', path: '/suppliers', icon: Users },
+    { name: 'Warehouses', path: '/warehouses', icon: Building2 },
     { name: 'Purchase Orders', path: '/purchase-orders', icon: ClipboardList },
     { name: 'Customer Orders', path: '/customer-orders', icon: ShoppingCart },
-    { name: 'Shipments', path: '/shipments', icon: Truck }
+    { name: 'Shipments', path: '/shipments', icon: Truck },
+    { name: 'Reports & Analytics', path: '/reports', icon: FileSpreadsheet },
+    ...(isAdmin ? [{ name: 'User Management', path: '/users', icon: UserCheck }] : []),
+    { name: 'Profile & Settings', path: '/profile', icon: Settings }
   ];
 
   return (
