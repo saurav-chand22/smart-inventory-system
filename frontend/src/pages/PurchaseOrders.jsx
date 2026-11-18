@@ -109,6 +109,10 @@ const PurchaseOrders = () => {
     }
   };
 
+  const now = new Date();
+  const todayStr = new Date(now.getTime() - now.getTimezoneOffset() * 60000)
+    .toISOString().split('T')[0];
+
   return (
     <div className="page-container">
       <div className="page-header">
@@ -242,7 +246,7 @@ const PurchaseOrders = () => {
           </div>
           <div className="form-group">
             <label className="form-label">Expected Delivery Date</label>
-            <input type="date" className="form-control" value={expectedDeliveryDate} onChange={(e) => setExpectedDeliveryDate(e.target.value)} />
+            <input type="date" min={todayStr} className="form-control" value={expectedDeliveryDate} onChange={(e) => setExpectedDeliveryDate(e.target.value)} />
           </div>
 
           <div style={{ marginTop: '20px', marginBottom: '10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>

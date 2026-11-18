@@ -1,7 +1,10 @@
 package com.inventory.smartinventory.dto;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import java.util.List;
 
 public class CustomerOrderRequest {
@@ -17,6 +20,7 @@ public class CustomerOrderRequest {
     private String shippingAddress;
 
     @NotEmpty(message = "Order must contain at least one product")
+    @Valid
     private List<CustomerOrderItemDto> items;
 
     public CustomerOrderRequest() {}
@@ -32,7 +36,11 @@ public class CustomerOrderRequest {
     public void setItems(List<CustomerOrderItemDto> items) { this.items = items; }
 
     public static class CustomerOrderItemDto {
+        @NotNull(message = "Product is required")
         private Long productId;
+
+        @NotNull(message = "Quantity is required")
+        @Min(value = 1, message = "Quantity must be at least 1")
         private Integer quantity;
 
         public Long getProductId() { return productId; }
