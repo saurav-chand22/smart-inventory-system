@@ -32,8 +32,7 @@ const Sidebar = () => {
     { name: 'Warehouses', path: '/warehouses', icon: Building2 },
     { name: 'Purchase Orders', path: '/purchase-orders', icon: ClipboardList },
     { name: 'Customer Orders', path: '/customer-orders', icon: ShoppingCart },
-    { name: 'Shipments', path: '/shipments', icon: Truck },
-    { name: 'Reports & Analytics', path: '/reports', icon: FileSpreadsheet }
+    { name: 'Shipments', path: '/shipments', icon: Truck }
   ];
 
   return (
