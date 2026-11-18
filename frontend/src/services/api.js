@@ -27,7 +27,14 @@ api.interceptors.response.use(
         window.location.href = '/login';
       }
     }
-    const message = error.response?.data?.message || 'An unexpected error occurred';
+    let message = error.response?.data?.message;
+    if (!message) {
+      if (error.code === 'ERR_NETWORK' || !error.response) {
+        message = 'Cannot connect to Backend Server (http://localhost:8080). Please ensure your Spring Boot backend is running.';
+      } else {
+        message = 'An unexpected error occurred';
+      }
+    }
     return Promise.reject(new Error(message));
   }
 );

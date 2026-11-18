@@ -232,4 +232,3 @@ CREATE INDEX idx_co_number ON customer_orders(order_number);
 CREATE INDEX idx_co_status ON customer_orders(status);
 CREATE INDEX idx_shipments_tracking ON shipments(tracking_number);
 CREATE INDEX idx_stock_trans_type_date ON stock_transactions(transaction_type, transaction_date);
-h
