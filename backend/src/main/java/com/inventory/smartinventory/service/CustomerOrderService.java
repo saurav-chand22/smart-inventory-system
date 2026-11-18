@@ -90,7 +90,7 @@ public class CustomerOrderService {
                 .orElseThrow(() -> new ResourceNotFoundException("Warehouse not found with ID: " + warehouseId));
 
         for (OrderItem item : order.getItems()) {
-            Inventory inv = inventoryRepository.findByProductIdAndWarehouseId(item.getProduct().getId(), warehouseId)
+            Inventory inv = inventoryRepository.lockByProductIdAndWarehouseId(item.getProduct().getId(), warehouseId)
                     .orElseThrow(() -> new InsufficientStockException("Product '" + item.getProduct().getName() + "' is not available in warehouse '" + warehouse.getName() + "'"));
 
             if (inv.getQuantityAvailable() < item.getQuantity()) {
@@ -99,7 +99,7 @@ public class CustomerOrderService {
         }
 
         for (OrderItem item : order.getItems()) {
-            Inventory inv = inventoryRepository.findByProductIdAndWarehouseId(item.getProduct().getId(), warehouseId).get();
+            Inventory inv = inventoryRepository.lockByProductIdAndWarehouseId(item.getProduct().getId(), warehouseId).get();
             inv.setQuantityAvailable(inv.getQuantityAvailable() - item.getQuantity());
             inv.setQuantityReserved(inv.getQuantityReserved() + item.getQuantity());
             inventoryRepository.save(inv);
