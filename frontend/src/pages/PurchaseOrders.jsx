@@ -48,6 +48,8 @@ const PurchaseOrders = () => {
     fetchOrders();
   }, []);
 
+  const todayStr = new Date().toISOString().split('T')[0];
+
   const handleAddItem = () => {
     setItems([...items, { productId: products[0]?.id || '', quantity: 10, unitPrice: products[0]?.unitPrice || 0 }]);
   };
@@ -71,6 +73,12 @@ const PurchaseOrders = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+
+    if (expectedDeliveryDate && expectedDeliveryDate < todayStr) {
+      setError('Expected delivery date cannot be in the past. It must be today or a future date.');
+      return;
+    }
+
     try {
       await api.post('/purchase-orders', {
         supplierId: Number(supplierId),
@@ -119,6 +127,9 @@ const PurchaseOrders = () => {
         {isAdmin && (
           <button
             onClick={() => {
+              const nextWeek = new Date();
+              nextWeek.setDate(nextWeek.getDate() + 7);
+              setExpectedDeliveryDate(nextWeek.toISOString().split('T')[0]);
               setItems([{ productId: products[0]?.id || '', quantity: 10, unitPrice: products[0]?.unitPrice || 0 }]);
               setError('');
               setIsModalOpen(true);
@@ -242,7 +253,16 @@ const PurchaseOrders = () => {
           </div>
           <div className="form-group">
             <label className="form-label">Expected Delivery Date</label>
-            <input type="date" className="form-control" value={expectedDeliveryDate} onChange={(e) => setExpectedDeliveryDate(e.target.value)} />
+            <input
+              type="date"
+              className="form-control"
+              min={todayStr}
+              value={expectedDeliveryDate}
+              onChange={(e) => setExpectedDeliveryDate(e.target.value)}
+            />
+            <small style={{ color: '#64748b', fontSize: '12px', marginTop: '4px', display: 'block' }}>
+              ℹ️ Delivery date must be today or a future date.
+            </small>
           </div>
 
           <div style={{ marginTop: '20px', marginBottom: '10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>

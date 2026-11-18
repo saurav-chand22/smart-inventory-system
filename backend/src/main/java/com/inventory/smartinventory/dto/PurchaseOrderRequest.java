@@ -1,5 +1,6 @@
 package com.inventory.smartinventory.dto;
 
+import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
@@ -12,6 +13,7 @@ public class PurchaseOrderRequest {
     @NotNull(message = "Warehouse ID is required")
     private Long warehouseId;
 
+    @FutureOrPresent(message = "Expected delivery date cannot be in the past. It must be today or a future date")
     private LocalDate expectedDeliveryDate;
 
     @NotEmpty(message = "PO must contain at least one item")

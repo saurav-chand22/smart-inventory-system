@@ -48,6 +48,10 @@ public class PurchaseOrderService {
             throw new BusinessRuleException("A purchase order must contain at least one product item");
         }
 
+        if (request.getExpectedDeliveryDate() != null && request.getExpectedDeliveryDate().isBefore(java.time.LocalDate.now())) {
+            throw new BusinessRuleException("Expected delivery date cannot be in the past. It must be today or a future date.");
+        }
+
         Supplier supplier = supplierRepository.findById(request.getSupplierId())
                 .orElseThrow(() -> new ResourceNotFoundException("Supplier not found with ID: " + request.getSupplierId()));
         Warehouse warehouse = warehouseRepository.findById(request.getWarehouseId())
