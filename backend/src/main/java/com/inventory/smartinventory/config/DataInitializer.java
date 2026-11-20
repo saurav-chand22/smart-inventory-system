@@ -110,8 +110,8 @@ public class DataInitializer implements CommandLineRunner {
         // 5. Seed sample products and inventory if empty
         if (productRepository.count() == 0) {
             Category cat1 = categoryRepository.findAll().get(0);
-            Product p1 = new Product(cat1, "ELC-SCN-001", "Handheld 2D Barcode Scanner", "Wireless Bluetooth scanner", new BigDecimal("89.99"), 15);
-            Product p2 = new Product(cat1, "ELC-PRN-002", "Industrial Thermal Label Printer", "4-inch heavy duty label printer", new BigDecimal("249.50"), 10);
+            Product p1 = new Product(cat1, "Handheld 2D Barcode Scanner", "Wireless Bluetooth scanner", new BigDecimal("89.99"), 15);
+            Product p2 = new Product(cat1, "Industrial Thermal Label Printer", "4-inch heavy duty label printer", new BigDecimal("249.50"), 10);
             productRepository.save(p1);
             productRepository.save(p2);
 
@@ -125,7 +125,7 @@ public class DataInitializer implements CommandLineRunner {
 
                 // Confirmed Order (ready for shipment)
                 CustomerOrder o1 = new CustomerOrder();
-                o1.setOrderNumber("ORD-2026-1001");
+                o1.setOrderNumber("ORD-19112026-1");
                 o1.setCustomerName("Acme Logistics Inc.");
                 o1.setCustomerEmail("procurement@acmelogistics.com");
                 o1.setCustomerPhone("+91 98765 43210");
@@ -140,7 +140,7 @@ public class DataInitializer implements CommandLineRunner {
 
                 // Pending Order (ready for Confirm & Reserve test)
                 CustomerOrder o2 = new CustomerOrder();
-                o2.setOrderNumber("ORD-2026-1002");
+                o2.setOrderNumber("ORD-19112026-2");
                 o2.setCustomerName("Summit Retail Solutions");
                 o2.setCustomerEmail("orders@summitretail.in");
                 o2.setCustomerPhone("+91 98111 22233");
@@ -156,7 +156,7 @@ public class DataInitializer implements CommandLineRunner {
                 // Sample Shipment
                 if (shipmentRepository.count() == 0) {
                     Shipment sh1 = new Shipment();
-                    sh1.setTrackingNumber("TRK-839201-BD");
+                    sh1.setTrackingNumber("TRK-1");
                     sh1.setCustomerOrder(o1);
                     sh1.setWarehouse(wh1);
                     sh1.setCarrier("BlueDart Express");

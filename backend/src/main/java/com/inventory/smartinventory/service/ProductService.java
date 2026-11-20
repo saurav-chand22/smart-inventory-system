@@ -48,15 +48,11 @@ public class ProductService {
 
     @Transactional
     public Product createProduct(ProductRequest request) {
-        if (productRepository.existsBySku(request.getSku())) {
-            throw new BusinessRuleException("Product with SKU '" + request.getSku() + "' already exists");
-        }
         Category category = categoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found with ID: " + request.getCategoryId()));
 
         Product product = new Product(
                 category,
-                request.getSku(),
                 request.getName(),
                 request.getDescription(),
                 request.getUnitPrice(),
@@ -68,14 +64,10 @@ public class ProductService {
     @Transactional
     public Product updateProduct(Long id, ProductRequest request) {
         Product product = getProductById(id);
-        if (!product.getSku().equalsIgnoreCase(request.getSku()) && productRepository.existsBySku(request.getSku())) {
-            throw new BusinessRuleException("Product with SKU '" + request.getSku() + "' already exists");
-        }
         Category category = categoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found with ID: " + request.getCategoryId()));
 
         product.setCategory(category);
-        product.setSku(request.getSku());
         product.setName(request.getName());
         product.setDescription(request.getDescription());
         product.setUnitPrice(request.getUnitPrice());

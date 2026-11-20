@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
 import Modal from '../components/Modal';
-import { Boxes, ArrowLeftRight, Sliders, AlertTriangle } from 'lucide-react';
+import { Boxes, Sliders } from 'lucide-react';
 
 const Inventory = () => {
   const [inventoryList, setInventoryList] = useState([]);
@@ -13,11 +13,9 @@ const Inventory = () => {
 
   // Modal states
   const [isAdjustModalOpen, setIsAdjustModalOpen] = useState(false);
-  const [isTransferModalOpen, setIsTransferModalOpen] = useState(false);
 
   // Form states
   const [adjustForm, setAdjustForm] = useState({ productId: '', warehouseId: '', adjustmentQuantity: 0, reason: '' });
-  const [transferForm, setTransferForm] = useState({ productId: '', sourceWarehouseId: '', targetWarehouseId: '', quantity: 1 });
   const [error, setError] = useState('');
 
   const fetchData = async () => {
@@ -59,22 +57,6 @@ const Inventory = () => {
     }
   };
 
-  const handleTransferSubmit = async (e) => {
-    e.preventDefault();
-    setError('');
-    try {
-      await api.post('/inventory/transfer', {
-        productId: Number(transferForm.productId),
-        sourceWarehouseId: Number(transferForm.sourceWarehouseId),
-        targetWarehouseId: Number(transferForm.targetWarehouseId),
-        quantity: Number(transferForm.quantity)
-      });
-      setIsTransferModalOpen(false);
-      fetchData();
-    } catch (err) {
-      setError(err.message || 'Stock transfer failed');
-    }
-  };
 
   const filtered = inventoryList.filter(item => {
     const matchesWh = selectedWarehouse ? String(item.warehouse?.id) === String(selectedWarehouse) : true;
@@ -101,17 +83,6 @@ const Inventory = () => {
             <Sliders size={16} />
             <span>Adjust Stock</span>
           </button>
-          <button
-            onClick={() => {
-              setTransferForm({ productId: products[0]?.id || '', sourceWarehouseId: warehouses[0]?.id || '', targetWarehouseId: warehouses[1]?.id || '', quantity: 5 });
-              setError('');
-              setIsTransferModalOpen(true);
-            }}
-            className="btn btn-primary"
-          >
-            <ArrowLeftRight size={16} />
-            <span>Transfer Stock</span>
-          </button>
         </div>
       </div>
 
@@ -131,7 +102,7 @@ const Inventory = () => {
           <select className="form-control" value={selectedProduct} onChange={(e) => setSelectedProduct(e.target.value)}>
             <option value="">All Products</option>
             {products.map(p => (
-              <option key={p.id} value={p.id}>{p.name} ({p.sku})</option>
+              <option key={p.id} value={p.id}>{p.name}</option>
             ))}
           </select>
         </div>
@@ -142,7 +113,6 @@ const Inventory = () => {
           <thead>
             <tr>
               <th>ID</th>
-              <th>SKU</th>
               <th>Product</th>
               <th>Warehouse</th>
               <th>Available Stock</th>
@@ -159,7 +129,6 @@ const Inventory = () => {
               return (
                 <tr key={item.id}>
                   <td>#{item.id}</td>
-                  <td><code>{item.product?.sku}</code></td>
                   <td><strong>{item.product?.name}</strong></td>
                   <td>{item.warehouse?.name}</td>
                   <td>
@@ -190,7 +159,7 @@ const Inventory = () => {
             })}
             {filtered.length === 0 && (
               <tr>
-                <td colSpan="9" style={{ textAlign: 'center', color: '#94a3b8' }}>No inventory records found for selected criteria.</td>
+                <td colSpan="8" style={{ textAlign: 'center', color: '#94a3b8' }}>No inventory records found for selected criteria.</td>
               </tr>
             )}
           </tbody>
@@ -210,7 +179,7 @@ const Inventory = () => {
               required
             >
               <option value="">Select Product</option>
-              {products.map(p => <option key={p.id} value={p.id}>{p.name} ({p.sku})</option>)}
+              {products.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
             </select>
           </div>
           <div className="form-group">
@@ -254,65 +223,6 @@ const Inventory = () => {
         </form>
       </Modal>
 
-      {/* Transfer Stock Modal */}
-      <Modal isOpen={isTransferModalOpen} onClose={() => setIsTransferModalOpen(false)} title="Inter-Warehouse Stock Transfer">
-        {error && <div style={{ padding: '10px', backgroundColor: '#fef2f2', color: '#dc2626', borderRadius: '6px', marginBottom: '14px', fontSize: '13px' }}>{error}</div>}
-        <form onSubmit={handleTransferSubmit}>
-          <div className="form-group">
-            <label className="form-label">Product</label>
-            <select
-              className="form-control"
-              value={transferForm.productId}
-              onChange={(e) => setTransferForm({ ...transferForm, productId: e.target.value })}
-              required
-            >
-              <option value="">Select Product</option>
-              {products.map(p => <option key={p.id} value={p.id}>{p.name} ({p.sku})</option>)}
-            </select>
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
-            <div className="form-group">
-              <label className="form-label">Source Warehouse</label>
-              <select
-                className="form-control"
-                value={transferForm.sourceWarehouseId}
-                onChange={(e) => setTransferForm({ ...transferForm, sourceWarehouseId: e.target.value })}
-                required
-              >
-                <option value="">Origin</option>
-                {warehouses.map(w => <option key={w.id} value={w.id}>{w.name}</option>)}
-              </select>
-            </div>
-            <div className="form-group">
-              <label className="form-label">Destination Warehouse</label>
-              <select
-                className="form-control"
-                value={transferForm.targetWarehouseId}
-                onChange={(e) => setTransferForm({ ...transferForm, targetWarehouseId: e.target.value })}
-                required
-              >
-                <option value="">Destination</option>
-                {warehouses.map(w => <option key={w.id} value={w.id}>{w.name}</option>)}
-              </select>
-            </div>
-          </div>
-          <div className="form-group">
-            <label className="form-label">Transfer Quantity</label>
-            <input
-              type="number"
-              min="1"
-              className="form-control"
-              value={transferForm.quantity}
-              onChange={(e) => setTransferForm({ ...transferForm, quantity: e.target.value })}
-              required
-            />
-          </div>
-          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '20px' }}>
-            <button type="button" onClick={() => setIsTransferModalOpen(false)} className="btn btn-secondary">Cancel</button>
-            <button type="submit" className="btn btn-primary">Execute Transfer</button>
-          </div>
-        </form>
-      </Modal>
     </div>
   );
 };

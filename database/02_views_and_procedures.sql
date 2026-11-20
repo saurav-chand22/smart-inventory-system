@@ -14,7 +14,6 @@ USE smart_inventory_db;
 CREATE OR REPLACE VIEW vw_product_stock_overview AS
 SELECT 
     p.id AS product_id,
-    p.sku,
     p.name AS product_name,
     c.id AS category_id,
     c.name AS category_name,
@@ -32,7 +31,7 @@ SELECT
 FROM products p
 JOIN categories c ON p.category_id = c.id
 LEFT JOIN inventory i ON p.id = i.product_id
-GROUP BY p.id, p.sku, p.name, c.id, c.name, p.unit_price, p.reorder_level;
+GROUP BY p.id, p.name, c.id, c.name, p.unit_price, p.reorder_level;
 
 -- ----------------------------------------------------------------------------
 -- VIEW 2: vw_low_stock_alerts
@@ -41,7 +40,6 @@ GROUP BY p.id, p.sku, p.name, c.id, c.name, p.unit_price, p.reorder_level;
 CREATE OR REPLACE VIEW vw_low_stock_alerts AS
 SELECT 
     p.id AS product_id,
-    p.sku,
     p.name AS product_name,
     c.name AS category_name,
     p.reorder_level,
@@ -50,7 +48,7 @@ SELECT
 FROM products p
 JOIN categories c ON p.category_id = c.id
 LEFT JOIN inventory i ON p.id = i.product_id
-GROUP BY p.id, p.sku, p.name, c.name, p.reorder_level
+GROUP BY p.id, p.name, c.name, p.reorder_level
 HAVING COALESCE(SUM(i.quantity_available), 0) <= p.reorder_level;
 
 -- ----------------------------------------------------------------------------

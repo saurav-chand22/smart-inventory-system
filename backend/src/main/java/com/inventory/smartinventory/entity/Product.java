@@ -16,9 +16,6 @@ public class Product {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
-    @Column(nullable = false, unique = true, length = 50)
-    private String sku;
-
     @Column(nullable = false, length = 150)
     private String name;
 
@@ -39,9 +36,8 @@ public class Product {
 
     public Product() {}
 
-    public Product(Category category, String sku, String name, String description, BigDecimal unitPrice, Integer reorderLevel) {
+    public Product(Category category, String name, String description, BigDecimal unitPrice, Integer reorderLevel) {
         this.category = category;
-        this.sku = sku;
         this.name = name;
         this.description = description;
         this.unitPrice = unitPrice;
@@ -60,9 +56,6 @@ public class Product {
 
     public Category getCategory() { return category; }
     public void setCategory(Category category) { this.category = category; }
-
-    public String getSku() { return sku; }
-    public void setSku(String sku) { this.sku = sku; }
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }

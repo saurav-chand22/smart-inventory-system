@@ -33,6 +33,15 @@ public class PurchaseOrderService {
     @Autowired
     private InventoryService inventoryService;
 
+    private synchronized String generateNextPoNumber() {
+        Long maxId = purchaseOrderRepository.findMaxId();
+        long nextNum = (maxId != null) ? maxId + 1 : 1;
+        while (purchaseOrderRepository.findByPoNumber("PO-" + nextNum).isPresent()) {
+            nextNum++;
+        }
+        return "PO-" + nextNum;
+    }
+
     public List<PurchaseOrder> getAllPurchaseOrders() {
         return purchaseOrderRepository.findAllByOrderByOrderDateDesc();
     }
@@ -54,7 +63,7 @@ public class PurchaseOrderService {
                 .orElseThrow(() -> new ResourceNotFoundException("Warehouse not found with ID: " + request.getWarehouseId()));
 
         PurchaseOrder po = new PurchaseOrder();
-        po.setPoNumber("PO-" + (System.currentTimeMillis() % 1000000));
+        po.setPoNumber(generateNextPoNumber());
         po.setSupplier(supplier);
         po.setWarehouse(warehouse);
         po.setStatus(PurchaseOrderStatus.PENDING);

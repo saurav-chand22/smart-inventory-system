@@ -42,6 +42,15 @@ public class ShipmentService {
                 .orElseThrow(() -> new ResourceNotFoundException("Shipment not found with ID: " + id));
     }
 
+    private synchronized String generateTrackingNumber() {
+        Long maxId = shipmentRepository.findMaxId();
+        long nextNum = (maxId != null) ? maxId + 1 : 1;
+        while (shipmentRepository.findByTrackingNumber("TRK-" + nextNum).isPresent()) {
+            nextNum++;
+        }
+        return "TRK-" + nextNum;
+    }
+
     @Transactional
     public Shipment createShipment(ShipmentRequest request, User user) {
         CustomerOrder order = customerOrderRepository.findById(request.getOrderId())
@@ -55,7 +64,7 @@ public class ShipmentService {
                 .orElseThrow(() -> new ResourceNotFoundException("Warehouse not found with ID: " + request.getWarehouseId()));
 
         Shipment shipment = new Shipment();
-        shipment.setTrackingNumber("TRK-" + (System.currentTimeMillis() % 1000000));
+        shipment.setTrackingNumber(generateTrackingNumber());
         shipment.setCustomerOrder(order);
         shipment.setWarehouse(warehouse);
         shipment.setCarrier(request.getCarrier());

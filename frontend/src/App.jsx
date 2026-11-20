@@ -15,9 +15,6 @@ import Inventory from './pages/Inventory';
 import PurchaseOrders from './pages/PurchaseOrders';
 import CustomerOrders from './pages/CustomerOrders';
 import Shipments from './pages/Shipments';
-import StockTransactions from './pages/StockTransactions';
-import UserManagement from './pages/UserManagement';
-import Reports from './pages/Reports';
 import ProfileSettings from './pages/ProfileSettings';
 
 const ProtectedLayout = ({ children, adminOnly = false }) => {
@@ -86,10 +83,6 @@ function App() {
           <Route path="/purchase-orders" element={<ProtectedLayout><PurchaseOrders /></ProtectedLayout>} />
           <Route path="/customer-orders" element={<ProtectedLayout><CustomerOrders /></ProtectedLayout>} />
           <Route path="/shipments" element={<ProtectedLayout><Shipments /></ProtectedLayout>} />
-          <Route path="/stock-transactions" element={<ProtectedLayout><StockTransactions /></ProtectedLayout>} />
-          <Route path="/transactions" element={<ProtectedLayout><StockTransactions /></ProtectedLayout>} />
-          <Route path="/users" element={<ProtectedLayout adminOnly={true}><UserManagement /></ProtectedLayout>} />
-          <Route path="/reports" element={<ProtectedLayout><Reports /></ProtectedLayout>} />
           <Route path="/profile" element={<ProtectedLayout><ProfileSettings /></ProtectedLayout>} />
           <Route path="/settings" element={<ProtectedLayout><ProfileSettings /></ProtectedLayout>} />
 

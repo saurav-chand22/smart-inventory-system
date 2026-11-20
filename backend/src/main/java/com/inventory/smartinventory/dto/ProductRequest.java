@@ -7,9 +7,6 @@ public class ProductRequest {
     @NotNull(message = "Category ID is required")
     private Long categoryId;
 
-    @NotBlank(message = "SKU is required")
-    private String sku;
-
     @NotBlank(message = "Name is required")
     private String name;
 
@@ -26,8 +23,6 @@ public class ProductRequest {
     public ProductRequest() {}
     public Long getCategoryId() { return categoryId; }
     public void setCategoryId(Long categoryId) { this.categoryId = categoryId; }
-    public String getSku() { return sku; }
-    public void setSku(String sku) { this.sku = sku; }
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
     public String getDescription() { return description; }

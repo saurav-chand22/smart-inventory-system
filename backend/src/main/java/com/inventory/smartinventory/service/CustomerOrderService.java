@@ -13,9 +13,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class CustomerOrderService {
@@ -44,6 +47,18 @@ public class CustomerOrderService {
                 .orElseThrow(() -> new ResourceNotFoundException("Customer order not found with ID: " + id));
     }
 
+    private synchronized String generateOrderNumber() {
+        String datePart = LocalDate.now().format(DateTimeFormatter.ofPattern("ddMMyyyy"));
+        String prefix = "ORD-" + datePart + "-";
+        long count = customerOrderRepository.countByOrderNumberPrefix(prefix);
+        long seq = count + 1;
+        // Ensure uniqueness in case of gaps/duplicates
+        while (customerOrderRepository.findByOrderNumber(prefix + seq).isPresent()) {
+            seq++;
+        }
+        return prefix + seq;
+    }
+
     @Transactional
     public CustomerOrder createCustomerOrder(CustomerOrderRequest request, User user) {
         if (request.getItems() == null || request.getItems().isEmpty()) {
@@ -51,7 +66,7 @@ public class CustomerOrderService {
         }
 
         CustomerOrder order = new CustomerOrder();
-        order.setOrderNumber("ORD-" + (System.currentTimeMillis() % 1000000));
+        order.setOrderNumber(generateOrderNumber());
         order.setCustomerName(request.getCustomerName());
         order.setCustomerEmail(request.getCustomerEmail());
         order.setCustomerPhone(request.getCustomerPhone());
@@ -89,21 +104,36 @@ public class CustomerOrderService {
         Warehouse warehouse = warehouseRepository.findById(warehouseId)
                 .orElseThrow(() -> new ResourceNotFoundException("Warehouse not found with ID: " + warehouseId));
 
+        // Aggregate total required quantity per product (handles duplicate line items for same product)
+        Map<Long, Integer> requiredQtyByProduct = new java.util.HashMap<>();
         for (OrderItem item : order.getItems()) {
-            Inventory inv = inventoryRepository.lockByProductIdAndWarehouseId(item.getProduct().getId(), warehouseId)
-                    .orElseThrow(() -> new InsufficientStockException("Product '" + item.getProduct().getName() + "' is not available in warehouse '" + warehouse.getName() + "'"));
+            requiredQtyByProduct.merge(item.getProduct().getId(), item.getQuantity(), Integer::sum);
+        }
 
-            if (inv.getQuantityAvailable() < item.getQuantity()) {
-                throw new InsufficientStockException("Insufficient stock for product '" + item.getProduct().getName() + "'. Required: " + item.getQuantity() + ", Available: " + inv.getQuantityAvailable());
+        // Validate aggregated quantities against available stock before making any changes
+        for (Map.Entry<Long, Integer> entry : requiredQtyByProduct.entrySet()) {
+            Long productId = entry.getKey();
+            int totalRequired = entry.getValue();
+            Inventory inv = inventoryRepository.lockByProductIdAndWarehouseId(productId, warehouseId)
+                    .orElseThrow(() -> new InsufficientStockException("Product is not available in warehouse '" + warehouse.getName() + "'"));
+
+            if (inv.getQuantityAvailable() < totalRequired) {
+                throw new InsufficientStockException("Insufficient stock for product '" + inv.getProduct().getName() + "'. Required: " + totalRequired + ", Available: " + inv.getQuantityAvailable());
             }
         }
 
-        for (OrderItem item : order.getItems()) {
-            Inventory inv = inventoryRepository.lockByProductIdAndWarehouseId(item.getProduct().getId(), warehouseId).get();
-            inv.setQuantityAvailable(inv.getQuantityAvailable() - item.getQuantity());
-            inv.setQuantityReserved(inv.getQuantityReserved() + item.getQuantity());
+        // Deduct aggregated quantities per product (single save per product, prevents double-deduction)
+        for (Map.Entry<Long, Integer> entry : requiredQtyByProduct.entrySet()) {
+            Long productId = entry.getKey();
+            int totalRequired = entry.getValue();
+            Inventory inv = inventoryRepository.lockByProductIdAndWarehouseId(productId, warehouseId).get();
+            inv.setQuantityAvailable(inv.getQuantityAvailable() - totalRequired);
+            inv.setQuantityReserved(inv.getQuantityReserved() + totalRequired);
             inventoryRepository.save(inv);
+        }
 
+        // Record stock transactions per order line item (for detailed audit trail)
+        for (OrderItem item : order.getItems()) {
             stockTransactionService.recordTransaction(
                     item.getProduct(), warehouse, TransactionType.STOCK_RESERVATION,
                     item.getQuantity(), order.getOrderNumber(), "Reserved stock for Order " + order.getOrderNumber(), user

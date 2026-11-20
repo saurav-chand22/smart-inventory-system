@@ -40,7 +40,6 @@ CREATE TABLE IF NOT EXISTS categories (
 CREATE TABLE IF NOT EXISTS products (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     category_id BIGINT NOT NULL,
-    sku VARCHAR(50) NOT NULL UNIQUE,
     name VARCHAR(150) NOT NULL,
     description TEXT,
     unit_price DECIMAL(10, 2) NOT NULL,
@@ -224,7 +223,6 @@ CREATE TABLE IF NOT EXISTS stock_transactions (
 -- ----------------------------------------------------------------------------
 -- Performance Indexes
 -- ----------------------------------------------------------------------------
-CREATE INDEX idx_products_sku ON products(sku);
 CREATE INDEX idx_products_category ON products(category_id);
 CREATE INDEX idx_inventory_lookup ON inventory(product_id, warehouse_id);
 CREATE INDEX idx_po_number ON purchase_orders(po_number);
@@ -232,4 +230,3 @@ CREATE INDEX idx_co_number ON customer_orders(order_number);
 CREATE INDEX idx_co_status ON customer_orders(status);
 CREATE INDEX idx_shipments_tracking ON shipments(tracking_number);
 CREATE INDEX idx_stock_trans_type_date ON stock_transactions(transaction_type, transaction_date);
-h

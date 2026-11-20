@@ -1,6 +1,6 @@
 import React from 'react';
 import { useAuth } from '../context/AuthContext';
-import { Bell, Search, ShieldCheck } from 'lucide-react';
+import { ShieldCheck } from 'lucide-react';
 
 const Navbar = () => {
   const { user, isAdmin } = useAuth();
@@ -8,15 +8,6 @@ const Navbar = () => {
   return (
     <header className="navbar">
       <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-        <div style={{ position: 'relative' }}>
-          <Search size={16} style={{ position: 'absolute', left: '12px', top: '10px', color: '#94a3b8' }} />
-          <input
-            type="text"
-            placeholder="Quick search products, orders, POs..."
-            className="form-control"
-            style={{ paddingLeft: '36px', width: '320px', height: '36px', fontSize: '13px' }}
-          />
-        </div>
       </div>
 
       <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>

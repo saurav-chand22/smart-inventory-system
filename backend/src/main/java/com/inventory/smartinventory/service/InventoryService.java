@@ -87,40 +87,4 @@ public class InventoryService {
         );
         return saved;
     }
-
-    @Transactional
-    public void transferStock(Long productId, Long sourceWarehouseId, Long targetWarehouseId, int quantity, User user) {
-        if (sourceWarehouseId.equals(targetWarehouseId)) {
-            throw new BusinessRuleException("Source and target warehouse cannot be the same");
-        }
-        if (quantity <= 0) {
-            throw new BusinessRuleException("Transfer quantity must be positive");
-        }
-
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
-        Warehouse srcWh = warehouseRepository.findById(sourceWarehouseId)
-                .orElseThrow(() -> new ResourceNotFoundException("Source warehouse not found"));
-        Warehouse tgtWh = warehouseRepository.findById(targetWarehouseId)
-                .orElseThrow(() -> new ResourceNotFoundException("Target warehouse not found"));
-
-        Inventory srcInv = inventoryRepository.findByProductIdAndWarehouseId(productId, sourceWarehouseId)
-                .orElseThrow(() -> new InsufficientStockException("Source warehouse does not have this product in stock"));
-
-        if (srcInv.getQuantityAvailable() < quantity) {
-            throw new InsufficientStockException("Insufficient stock in source warehouse. Available: " + srcInv.getQuantityAvailable() + ", requested: " + quantity);
-        }
-
-        Inventory tgtInv = inventoryRepository.findByProductIdAndWarehouseId(productId, targetWarehouseId)
-                .orElse(new Inventory(product, tgtWh, 0, 0));
-
-        srcInv.setQuantityAvailable(srcInv.getQuantityAvailable() - quantity);
-        tgtInv.setQuantityAvailable(tgtInv.getQuantityAvailable() + quantity);
-
-        inventoryRepository.save(srcInv);
-        inventoryRepository.save(tgtInv);
-
-        stockTransactionService.recordTransaction(product, srcWh, TransactionType.STOCK_TRANSFER, -quantity, "TRF-OUT", "Transfer to " + tgtWh.getName(), user);
-        stockTransactionService.recordTransaction(product, tgtWh, TransactionType.STOCK_TRANSFER, quantity, "TRF-IN", "Transfer from " + srcWh.getName(), user);
-    }
 }

@@ -257,7 +257,7 @@ const CustomerOrders = () => {
           {orderItems.map((item, index) => (
             <div key={index} style={{ display: 'grid', gridTemplateColumns: '3fr 1fr auto', gap: '10px', marginBottom: '10px', alignItems: 'center' }}>
               <select className="form-control" value={item.productId} onChange={(e) => handleItemChange(index, 'productId', e.target.value)} required>
-                <option value="">Select Product SKU</option>
+                <option value="">Select Product</option>
                 {products.map(p => <option key={p.id} value={p.id}>{p.name} - ₹{parseFloat(p.unitPrice).toFixed(2)}</option>)}
               </select>
               <input type="number" min="1" placeholder="Qty" className="form-control" value={item.quantity} onChange={(e) => handleItemChange(index, 'quantity', parseInt(e.target.value) || 1)} required />
@@ -327,7 +327,7 @@ const CustomerOrders = () => {
                 <tbody>
                   {selectedOrder.items?.map(it => (
                     <tr key={it.id}>
-                      <td><strong>{it.product?.name}</strong> <span style={{ fontSize: '12px', color: '#64748b' }}>({it.product?.sku})</span></td>
+                      <td><strong>{it.product?.name}</strong></td>
                       <td>{it.quantity}</td>
                       <td>₹{parseFloat(it.unitPrice).toFixed(2)}</td>
                       <td><strong>₹{parseFloat(it.subtotal).toFixed(2)}</strong></td>

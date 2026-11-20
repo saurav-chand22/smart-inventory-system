@@ -3,8 +3,9 @@ title Smart Inventory System Launcher
 echo ===================================================
 echo  Starting Smart Inventory and Supply Chain System
 echo ===================================================
-echo Starting Backend Server on http://localhost:8080 ...
-start "Backend Server (Spring Boot)" cmd /k "cd /d %~dp0backend && ..\..\maven\apache-maven-3.9.6\bin\mvn.cmd spring-boot:run -Dspring-boot.run.profiles=h2"
+if "%JAVA_HOME%"=="" set "JAVA_HOME=C:\Program Files\Java\jdk-21.0.10"
+echo Starting Backend Server on http://localhost:8085 ...
+start "Backend Server (Spring Boot)" cmd /k "cd /d %~dp0backend && ..\tools\apache-maven-3.9.6\bin\mvn.cmd spring-boot:run -Dspring-boot.run.profiles=h2"
 
 echo Waiting 6 seconds for backend initialization...
 timeout /t 6 /nobreak >nul

@@ -48,18 +48,18 @@ ON DUPLICATE KEY UPDATE name = VALUES(name);
 -- ----------------------------------------------------------------------------
 -- 5. Seed Products
 -- ----------------------------------------------------------------------------
-INSERT INTO products (id, category_id, sku, name, description, unit_price, reorder_level) VALUES
-(1, 1, 'ELC-SCN-001', 'Handheld 2D Barcode Scanner', 'Wireless Bluetooth 2D barcode scanner with charging cradle', 89.99, 15),
-(2, 1, 'ELC-PRN-002', 'Industrial Thermal Label Printer', '4-inch heavy duty thermal barcode label printer 300dpi', 249.50, 10),
-(3, 2, 'EQP-PLJ-001', 'Heavy Duty Hydraulic Pallet Jack', '5500 lbs capacity manual pallet truck with polyurethane wheels', 420.00, 5),
-(4, 2, 'EQP-LAD-002', 'Rolling Warehouse Safety Ladder', '6-step steel safety ladder with lockable caster wheels', 185.00, 8),
-(5, 3, 'PKG-BOX-001', 'Corrugated Box 12x12x12 Bundle (25pk)', 'Heavy duty single-wall kraft corrugated shipping boxes', 32.50, 50),
-(6, 3, 'PKG-BBL-002', 'Perforated Bubble Cushioning Roll', '350ft x 12in clear bubble wrap for delicate goods packaging', 28.00, 40),
-(7, 4, 'RAW-COP-001', 'Heavy Gauge Copper Wiring Spool (500m)', 'Pure annealed industrial copper conductor spool', 145.00, 15),
-(8, 4, 'RAW-ALM-002', 'T-Slot Aluminum Extrusion 2020 (10pk)', 'Modular anodized aluminum framework rail 1000mm', 65.00, 25),
-(9, 5, 'SAF-HAT-001', 'Vented Hard Hat with Ratchet Suspension', 'ANSI certified Class C industrial protective helmet', 22.00, 30),
-(10, 5, 'SAF-GLV-002', 'Cut-Resistant Nitrile Coated Gloves (12pk)', 'Level 5 cut resistance heavy duty assembly gloves', 36.00, 45)
-ON DUPLICATE KEY UPDATE sku = VALUES(sku);
+INSERT INTO products (id, category_id, name, description, unit_price, reorder_level) VALUES
+(1, 1, 'Handheld 2D Barcode Scanner', 'Wireless Bluetooth 2D barcode scanner with charging cradle', 89.99, 15),
+(2, 1, 'Industrial Thermal Label Printer', '4-inch heavy duty thermal barcode label printer 300dpi', 249.50, 10),
+(3, 2, 'Heavy Duty Hydraulic Pallet Jack', '5500 lbs capacity manual pallet truck with polyurethane wheels', 420.00, 5),
+(4, 2, 'Rolling Warehouse Safety Ladder', '6-step steel safety ladder with lockable caster wheels', 185.00, 8),
+(5, 3, 'Corrugated Box 12x12x12 Bundle (25pk)', 'Heavy duty single-wall kraft corrugated shipping boxes', 32.50, 50),
+(6, 3, 'Perforated Bubble Cushioning Roll', '350ft x 12in clear bubble wrap for delicate goods packaging', 28.00, 40),
+(7, 4, 'Heavy Gauge Copper Wiring Spool (500m)', 'Pure annealed industrial copper conductor spool', 145.00, 15),
+(8, 4, 'T-Slot Aluminum Extrusion 2020 (10pk)', 'Modular anodized aluminum framework rail 1000mm', 65.00, 25),
+(9, 5, 'Vented Hard Hat with Ratchet Suspension', 'ANSI certified Class C industrial protective helmet', 22.00, 30),
+(10, 5, 'Cut-Resistant Nitrile Coated Gloves (12pk)', 'Level 5 cut resistance heavy duty assembly gloves', 36.00, 45)
+ON DUPLICATE KEY UPDATE name = VALUES(name);
 
 -- ----------------------------------------------------------------------------
 -- 6. Seed Supplier-Product Associations

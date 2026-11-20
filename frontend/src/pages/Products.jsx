@@ -13,7 +13,6 @@ const Products = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
   const [formData, setFormData] = useState({
-    sku: '',
     name: '',
     categoryId: '',
     description: '',
@@ -46,7 +45,6 @@ const Products = () => {
   const handleOpenAdd = () => {
     setEditingProduct(null);
     setFormData({
-      sku: `SKU-${Math.floor(1000 + Math.random() * 9000)}`,
       name: '',
       categoryId: categories[0]?.id || '',
       description: '',
@@ -60,7 +58,6 @@ const Products = () => {
   const handleOpenEdit = (p) => {
     setEditingProduct(p);
     setFormData({
-      sku: p.sku,
       name: p.name,
       categoryId: p.category?.id || '',
       description: p.description || '',
@@ -98,7 +95,7 @@ const Products = () => {
   };
 
   const filtered = products.filter(p => {
-    const matchesSearch = p.name.toLowerCase().includes(search.toLowerCase()) || p.sku.toLowerCase().includes(search.toLowerCase());
+    const matchesSearch = p.name.toLowerCase().includes(search.toLowerCase());
     const matchesCat = selectedCategory ? String(p.category?.id) === String(selectedCategory) : true;
     return matchesSearch && matchesCat;
   });
@@ -108,7 +105,7 @@ const Products = () => {
       <div className="page-header">
         <div>
           <h1 className="page-title">Product Catalog</h1>
-          <p className="page-subtitle">Manage SKUs, unit pricing, product descriptions, and category mappings</p>
+          <p className="page-subtitle">Manage unit pricing, product descriptions, and category mappings</p>
         </div>
         {isAdmin && (
           <button onClick={handleOpenAdd} className="btn btn-primary">
@@ -125,7 +122,7 @@ const Products = () => {
           <input
             type="text"
             className="form-control"
-            placeholder="Search by product name or SKU..."
+            placeholder="Search by product name..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             style={{ paddingLeft: '36px' }}
@@ -150,7 +147,6 @@ const Products = () => {
           <thead>
             <tr>
               <th>ID</th>
-              <th>SKU</th>
               <th>Product Name</th>
               <th>Category</th>
               <th>Unit Price</th>
@@ -162,7 +158,6 @@ const Products = () => {
             {filtered.map(p => (
               <tr key={p.id}>
                 <td>#{p.id}</td>
-                <td><code>{p.sku}</code></td>
                 <td>
                   <strong>{p.name}</strong>
                   {p.description && <p style={{ fontSize: '12px', color: '#64748b' }}>{p.description}</p>}
@@ -190,7 +185,7 @@ const Products = () => {
             ))}
             {filtered.length === 0 && (
               <tr>
-                <td colSpan={isAdmin ? 7 : 6} style={{ textAlign: 'center', color: '#94a3b8' }}>
+                <td colSpan={isAdmin ? 6 : 5} style={{ textAlign: 'center', color: '#94a3b8' }}>
                   No products matched the filter criteria.
                 </td>
               </tr>
@@ -211,16 +206,6 @@ const Products = () => {
           </div>
         )}
         <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label className="form-label">SKU (Stock Keeping Unit)</label>
-            <input
-              type="text"
-              className="form-control"
-              value={formData.sku}
-              onChange={(e) => setFormData({ ...formData, sku: e.target.value })}
-              required
-            />
-          </div>
           <div className="form-group">
             <label className="form-label">Product Name</label>
             <input

@@ -91,7 +91,7 @@ const Dashboard = () => {
               Low Stock Warning: {lowStockList.length} product(s) are below reorder threshold!
             </strong>
             <p style={{ color: '#b45309', fontSize: '13px', marginTop: '2px' }}>
-              Items needing replenishment: {lowStockList.map(p => `${p.name} (SKU: ${p.sku})`).join(', ')}.
+              Items needing replenishment: {lowStockList.map(p => p.name).join(', ')}.
             </p>
           </div>
         </div>
@@ -164,7 +164,7 @@ const Dashboard = () => {
                       {tx.transactionType}
                     </span>
                   </td>
-                  <td><strong>{tx.product?.name}</strong> <span style={{ color: '#64748b', fontSize: '12px' }}>({tx.product?.sku})</span></td>
+                  <td><strong>{tx.product?.name}</strong></td>
                   <td>{tx.warehouse?.name}</td>
                   <td>
                     <span style={{ fontWeight: 700, color: tx.quantity > 0 ? '#16a34a' : '#dc2626' }}>

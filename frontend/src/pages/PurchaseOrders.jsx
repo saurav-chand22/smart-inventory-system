@@ -264,8 +264,8 @@ const PurchaseOrders = () => {
                 onChange={(e) => handleItemChange(index, 'productId', e.target.value)}
                 required
               >
-                <option value="">Select SKU</option>
-                {products.map(p => <option key={p.id} value={p.id}>{p.name} ({p.sku})</option>)}
+                <option value="">Select Product</option>
+                {products.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
               </select>
               <input
                 type="number"
@@ -329,7 +329,7 @@ const PurchaseOrders = () => {
                 <tbody>
                   {selectedOrder.items?.map(it => (
                     <tr key={it.id}>
-                      <td><strong>{it.product?.name}</strong> <span style={{ fontSize: '12px', color: '#64748b' }}>({it.product?.sku})</span></td>
+                      <td><strong>{it.product?.name}</strong></td>
                       <td>{it.orderedQuantity}</td>
                       <td><strong>{it.receivedQuantity}</strong></td>
                       <td>₹{parseFloat(it.unitPrice).toFixed(2)}</td>

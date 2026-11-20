@@ -41,17 +41,4 @@ public class InventoryController {
         Inventory updated = inventoryService.adjustStock(request, user);
         return ResponseEntity.ok(ApiResponse.success("Stock adjusted successfully", updated));
     }
-
-    @PostMapping("/transfer")
-    public ResponseEntity<ApiResponse<Void>> transferStock(
-            @RequestBody Map<String, Object> body,
-            @AuthenticationPrincipal User user) {
-        Long productId = Long.valueOf(body.get("productId").toString());
-        Long sourceWarehouseId = Long.valueOf(body.get("sourceWarehouseId").toString());
-        Long targetWarehouseId = Long.valueOf(body.get("targetWarehouseId").toString());
-        int quantity = Integer.parseInt(body.get("quantity").toString());
-
-        inventoryService.transferStock(productId, sourceWarehouseId, targetWarehouseId, quantity, user);
-        return ResponseEntity.ok(ApiResponse.success("Stock transferred successfully", null));
-    }
 }
